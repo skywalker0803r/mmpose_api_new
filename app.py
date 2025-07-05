@@ -21,9 +21,9 @@ from mmpose.evaluation.functional import nms
 print("--- 正在啟動 FastAPI 應用 (含追蹤邏輯) ---")
 
 # --- 1. 模型初始化 (保持不變) ---
-det_config = 'checkpoints/mmdet/faster-rcnn_r50_fpn_1x_coco.py'
+det_config = 'mmdetection/configs/faster_rcnn/faster-rcnn_r50_fpn_1x_coco.py'
 det_checkpoint = 'checkpoints/mmdet/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth'
-pose_config = 'checkpoints/mmpose/td-hm_hrnet-w48_8xb32-210e_coco-256x192.py'
+pose_config = 'mmpose/configs/body_2d_keypoint/topdown_heatmap/coco/td-hm_hrnet-w48_8xb32-210e_coco-256x192.py'
 pose_checkpoint = 'checkpoints/mmpose/td-hm_hrnet-w48_8xb32-210e_coco-256x192-0e67c616_20220913.pth'
 
 try:

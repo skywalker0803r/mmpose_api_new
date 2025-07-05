@@ -55,7 +55,15 @@ RUN pip install -r requirements.txt
 # 以可編輯模式 (-e .) 安裝 MMPose，這樣可以從源代碼直接導入和使用 MMPose 模組。
 RUN pip install -v -e .
 
-# 切換回主工作目錄。
+# mmpose安裝完畢切換回主工作目錄。
+WORKDIR /workspace
+
+RUN git clone https://github.com/open-mmlab/mmdetection.git /workspace/mmdetection
+WORKDIR /workspace/mmdetection
+RUN pip install -r requirements.txt
+RUN pip install -v -e .
+
+# mmdetection安裝完畢切換回主工作目錄。
 WORKDIR /workspace
 
 # 建立模型檔案的儲存目錄。
@@ -63,11 +71,11 @@ RUN mkdir -p checkpoints/mmdet checkpoints/mmpose
 
 # 下載 MMDetection 模型設定檔和權重檔。
 # 注意：這些 URL 是從 OpenMMLab 官方 Model Zoo 獲取的，請確保它們是最新的。
-RUN curl -L https://raw.githubusercontent.com/open-mmlab/mmdetection/v3.0.0/configs/faster_rcnn/faster-rcnn_r50_fpn_1x_coco.py -o checkpoints/mmdet/faster-rcnn_r50_fpn_1x_coco.py \
+RUN curl -L https://raw.githubusercontent.com/open-mmlab/mmdetection/v3.0.0/configs/faster_rcnn/faster-rcnn_r50_fpn_1x_coco.py -o mmdetection/configs/faster_rcnn/faster-rcnn_r50_fpn_1x_coco.py \
  && curl -L https://download.openmmlab.com/mmdetection/v2.0/faster_rcnn/faster_rcnn_r50_fpn_1x_coco/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth -o checkpoints/mmdet/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth
 
 # 下載 MMPose 模型設定檔和權重檔。
-RUN curl -L https://raw.githubusercontent.com/open-mmlab/mmpose/v1.0.0/configs/body_2d_keypoint/topdown_heatmap/coco/td-hm_hrnet-w48_8xb32-210e_coco-256x192.py -o checkpoints/mmpose/td-hm_hrnet-w48_8xb32-210e_coco-256x192.py \
+RUN curl -L https://raw.githubusercontent.com/open-mmlab/mmpose/v1.0.0/configs/body_2d_keypoint/topdown_heatmap/coco/td-hm_hrnet-w48_8xb32-210e_coco-256x192.py -o mmpose/configs/body_2d_keypoint/topdown_heatmap/coco/td-hm_hrnet-w48_8xb32-210e_coco-256x192.py \
  && curl -L https://download.openmmlab.com/mmpose/v1/body_2d_keypoint/topdown_heatmap/coco/td-hm_hrnet-w48_8xb32-210e_coco-256x192-0e67c616_20220913.pth -o checkpoints/mmpose/td-hm_hrnet-w48_8xb32-210e_coco-256x192-0e67c616_20220913.pth
 
 # 將本地的 app.py 檔案複製到 /workspace/app.py。
