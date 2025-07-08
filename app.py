@@ -12,7 +12,7 @@ from mmdet.apis import init_detector, inference_detector
 from mmpose.structures import merge_data_samples, split_instances
 from mmpose.utils import adapt_mmdet_pipeline
 
-from bytetrack.byte_tracker import BYTETracker  # ByteTrack追蹤器
+from bytetracker import BYTETracker # ByteTrack追蹤器
 
 print("--- 啟動 FastAPI + ByteTrack 批次推論 範例 ---")
 
