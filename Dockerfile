@@ -39,7 +39,7 @@ RUN pip install torch==2.0.0+cu118 torchvision==0.15.1+cu118 torchaudio==2.0.1 -
 # openmim: OpenMMLab 專案的管理器，用於安裝 MMLab 庫和下載模型。
 # fastapi, uvicorn: 用於構建和運行 RESTful API 服務。
 # python-multipart: FastAPI 處理文件上傳所需的依賴。
-RUN pip install "numpy<2.0.0" openmim fastapi uvicorn python-multipart bytetracker
+RUN pip install "numpy<2.0.0" openmim fastapi uvicorn python-multipart cython lapx bytetracker
 
 # 使用 mim 工具安裝指定版本的 mmcv 和 mmdet。
 # mmcv 是 OpenMMLab 的基礎庫，mmdet 是 MMDetection，MMPose 依賴它們。
