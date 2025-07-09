@@ -11,12 +11,14 @@ WORKDIR /workspace
 # 更新 apt 軟體包列表並安裝必要的系統依賴。
 # 使用 --no-install-recommends 減少映像檔大小。
 # python3.10, python3.10-venv, python3-pip, git: Python 開發環境和版本控制工具。
+# *** 新增 python3.10-dev 以提供 Python.h 標頭檔，解決編譯 Python 擴展時的錯誤。 ***
 # libgl1, libglib2.0-0, libsm6, libxext6, libxrender1: OpenCV 運行時所需的圖形庫依賴。
 # ffmpeg: 處理影片文件所需的工具。
 # curl: 用於下載文件。
 # 最後，清理 apt 緩存以減少 Docker 映像大小。
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3.10 python3.10-venv python3-pip git \
+    python3.10-dev \
     libgl1 libglib2.0-0 libsm6 libxext6 libxrender1 ffmpeg curl \
  && rm -rf /var/lib/apt/lists/*
 
