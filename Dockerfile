@@ -11,18 +11,14 @@ WORKDIR /workspace
 # 更新 apt 軟體包列表並安裝必要的系統依賴。
 # 使用 --no-install-recommends 減少映像檔大小。
 # python3.10, python3.10-venv, python3-pip, git: Python 開發環境和版本控制工具。
-# *** 新增 python3.10-dev 以提供 Python.h 標頭檔，解決編譯 Python 擴展時的錯誤。 ***
 # libgl1, libglib2.0-0, libsm6, libxext6, libxrender1: OpenCV 運行時所需的圖形庫依賴。
 # ffmpeg: 處理影片文件所需的工具。
 # curl: 用於下載文件。
-# *** 為解決 lap 庫編譯問題，新增 libatlas-base-dev 和 gfortran。 ***
 # 最後，清理 apt 緩存以減少 Docker 映像大小。
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3.10 python3.10-venv python3-pip git \
-    python3.10-dev \
     libgl1 libglib2.0-0 libsm6 libxext6 libxrender1 ffmpeg curl \
-    libatlas-base-dev gfortran \
-    && rm -rf /var/lib/apt/lists/*
+ && rm -rf /var/lib/apt/lists/*
 
 # 將 /usr/bin/python 指向 /usr/bin/python3.10，確保系統預設使用 Python 3.10。
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.10 1
@@ -43,8 +39,7 @@ RUN pip install torch==2.0.0+cu118 torchvision==0.15.1+cu118 torchaudio==2.0.1 -
 # openmim: OpenMMLab 專案的管理器，用於安裝 MMLab 庫和下載模型。
 # fastapi, uvicorn: 用於構建和運行 RESTful API 服務。
 # python-multipart: FastAPI 處理文件上傳所需的依賴。
-# 針對 lap 安裝失敗的問題，強制使用 --no-build-isolation。
-RUN pip install "numpy<2.0.0" openmim fastapi uvicorn python-multipart cython lapx bytetracker --no-build-isolation
+RUN pip install "numpy<2.0.0" openmim fastapi uvicorn python-multipart
 
 # 使用 mim 工具安裝指定版本的 mmcv 和 mmdet。
 # mmcv 是 OpenMMLab 的基礎庫，mmdet 是 MMDetection，MMPose 依賴它們。
@@ -66,7 +61,6 @@ WORKDIR /workspace
 RUN git clone https://github.com/open-mmlab/mmdetection.git /workspace/mmdetection
 WORKDIR /workspace/mmdetection
 RUN pip install -r requirements.txt
-# 執行 pip install -v -e . 安裝 MMDetection
 RUN pip install -v -e .
 
 # mmdetection安裝完畢切換回主工作目錄。
@@ -78,16 +72,16 @@ RUN mkdir -p checkpoints/mmdet checkpoints/mmpose
 # 下載 MMDetection 模型設定檔和權重檔。
 # 注意：這些 URL 是從 OpenMMLab 官方 Model Zoo 獲取的，請確保它們是最新的。
 RUN curl -L https://raw.githubusercontent.com/open-mmlab/mmdetection/v3.0.0/configs/faster_rcnn/faster-rcnn_r50_fpn_1x_coco.py -o mmdetection/configs/faster_rcnn/faster-rcnn_r50_fpn_1x_coco.py \
-&& curl -L https://download.openmmlab.com/mmdetection/v2.0/faster_rcnn/faster_rcnn_r50_fpn_1x_coco/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth -o checkpoints/mmdet/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth
+ && curl -L https://download.openmmlab.com/mmdetection/v2.0/faster_rcnn/faster_rcnn_r50_fpn_1x_coco/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth -o checkpoints/mmdet/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth
 
 # 下載 MMPose 模型設定檔和權重檔。
 RUN curl -L https://raw.githubusercontent.com/open-mmlab/mmpose/v1.0.0/configs/body_2d_keypoint/topdown_heatmap/coco/td-hm_hrnet-w48_8xb32-210e_coco-256x192.py -o mmpose/configs/body_2d_keypoint/topdown_heatmap/coco/td-hm_hrnet-w48_8xb32-210e_coco-256x192.py \
-&& curl -L https://download.openmmlab.com/mmpose/v1/body_2d_keypoint/topdown_heatmap/coco/td-hm_hrnet-w48_8xb32-210e_coco-256x192-0e67c616_20220913.pth -o checkpoints/mmpose/td-hm_hrnet-w48_8xb32-210e_coco-256x192-0e67c616_20220913.pth
+ && curl -L https://download.openmmlab.com/mmpose/v1/body_2d_keypoint/topdown_heatmap/coco/td-hm_hrnet-w48_8xb32-210e_coco-256x192-0e67c616_20220913.pth -o checkpoints/mmpose/td-hm_hrnet-w48_8xb32-210e_coco-256x192-0e67c616_20220913.pth
 
 # 將本地的 app.py 檔案複製到 /workspace/app.py。
 COPY app.py /workspace/app.py
 
-# 宣告容器將在 8080 端口上監聽。 這是一個資訊，用於 Docker 端口映射。
+# 宣告容器將在 8080 端口上監聽。這是一個資訊，用於 Docker 端口映射。
 EXPOSE 8080
 
 # 定義啟動容器時執行的命令。
