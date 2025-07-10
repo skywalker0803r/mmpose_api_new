@@ -30,7 +30,7 @@ RUN pip install torch==2.0.0+cu118 torchvision==0.15.1+cu118 torchaudio==2.0.1 -
 
 # 安裝其他 Python 庫。
 # 新增 celery 和 redis 用於非同步任務處理。
-RUN pip install numpy==1.26.4 openmim fastapi uvicorn python-multipart "celery[redis]" redis xtcocotools
+RUN pip install numpy==1.26.4 openmim fastapi uvicorn python-multipart
 
 # 安裝 mmcv 和 mmdet。
 RUN mim install mmcv==2.0.1
@@ -63,7 +63,6 @@ RUN curl -L https://download.openmmlab.com/mmpose/v1/projects/rtmposev1/rtmpose-
 
  # 複製應用程式檔案到容器中。
 COPY app.py /workspace/app.py
-COPY celery_worker.py /workspace/celery_worker.py
 COPY start.sh /workspace/start.sh
 
 # 賦予啟動腳本執行權限。
