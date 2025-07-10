@@ -29,8 +29,7 @@ RUN pip install --upgrade pip setuptools wheel
 RUN pip install torch==2.0.0+cu118 torchvision==0.15.1+cu118 torchaudio==2.0.1 --index-url https://download.pytorch.org/whl/cu118
 
 # 安裝其他 Python 庫。
-# 新增 celery 和 redis 用於非同步任務處理。
-RUN pip install numpy==1.26.4 openmim fastapi uvicorn python-multipart
+RUN pip install "numpy<2.0.0" openmim fastapi uvicorn python-multipart
 
 # 安裝 mmcv 和 mmdet。
 RUN mim install mmcv==2.0.1
