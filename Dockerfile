@@ -40,6 +40,7 @@ RUN git clone https://github.com/open-mmlab/mmpose.git /workspace/mmpose
 WORKDIR /workspace/mmpose
 RUN pip install -r requirements.txt
 RUN pip install -v -e .
+RUN pip install "numpy<2.0.0"
 
 # 克隆並安裝 mmdetection。
 WORKDIR /workspace
@@ -47,6 +48,7 @@ RUN git clone https://github.com/open-mmlab/mmdetection.git /workspace/mmdetecti
 WORKDIR /workspace/mmdetection
 RUN pip install -r requirements.txt
 RUN pip install -v -e .
+RUN pip install "numpy<2.0.0"
 
 # 切換回主工作目錄
 WORKDIR /workspace
