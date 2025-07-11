@@ -54,6 +54,7 @@ WORKDIR /workspace/mmpose
 RUN pip install -r requirements.txt
 # 以可編輯模式 (-e .) 安裝 MMPose，這樣可以從源代碼直接導入和使用 MMPose 模組。
 RUN pip install -v -e .
+RUN pip install "numpy<2.0.0"
 
 # mmpose安裝完畢切換回主工作目錄。
 WORKDIR /workspace
@@ -62,6 +63,7 @@ RUN git clone https://github.com/open-mmlab/mmdetection.git /workspace/mmdetecti
 WORKDIR /workspace/mmdetection
 RUN pip install -r requirements.txt
 RUN pip install -v -e .
+RUN pip install "numpy<2.0.0"
 
 # mmdetection安裝完畢切換回主工作目錄。
 WORKDIR /workspace
